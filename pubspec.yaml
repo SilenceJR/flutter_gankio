@@ -53,6 +53,10 @@ dependencies:
   #showToast
   oktoast: ^2.2.0
 
+  #显示来自互联网的图像并将其保存在缓存目录中。
+  #[https://dart-pub.mirrors.sjtug.sjtu.edu.cn/packages/cached_network_image:]
+  cached_network_image: ^1.1.2+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,7 +1,9 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gankio/app.dart';
 import 'package:flutter_gankio/home.dart';
 import 'package:flutter_gankio/net/http_util.dart';
+import 'package:flutter_gankio/splash.dart';
 import 'package:oktoast/oktoast.dart';
 
 void main() {
@@ -11,6 +13,7 @@ void main() {
 
 _init() async {
   await SpUtil.getInstance();
+  LogUtil.init(isDebug: !Application.inProduction, tag: "Gank");
   HttpUtils.getInstance();
 }
 
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(),
+        home: SplashPage(),
       ),
     );
   }
