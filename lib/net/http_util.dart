@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_gankio/app.dart';
+import 'package:flutter_gankio/model/gank_model.dart';
 
 class HttpUtils {
   Dio _dio;
@@ -34,10 +35,10 @@ class HttpUtils {
   }
 
   //get请求
-  getSync(
+  Future<BaseEntity<T>> getSync<T>(
       String url,
       Map<String, dynamic> params,) async {
-    await _requestSync(url, 'get', params, null);
+    return await _requestSync<T>(url, 'get', params, null);
   }
 
   //post请求
@@ -127,7 +128,7 @@ class HttpUtils {
     }
   }
 
-  _requestSync(
+  Future<BaseEntity<T>> _requestSync<T>(
       String url, [
         String method,
         Map<String, dynamic> params,
@@ -171,7 +172,7 @@ class HttpUtils {
         print('请求头: ' + _dio.options.headers.toString());
         print('method: ' + _dio.options.method);
       }
-      return error.message;
+      return BaseEntity(errorMessage: error.message);
     }
 
     // debug模式打印相关数据
@@ -188,9 +189,9 @@ class HttpUtils {
     String dataStr = json.encode(response.data);
     Map<String, dynamic> dataMap = json.decode(dataStr);
     if (dataMap == null || dataMap.isEmpty) {
-      return response.data.toString();
+      return BaseEntity(errorMessage: response.data.toString());
     } else {
-      return dataMap;
+      return BaseEntity.fromJson(dataMap);
     }
   }
 }

@@ -57,6 +57,9 @@ dependencies:
   #[https://dart-pub.mirrors.sjtug.sjtu.edu.cn/packages/cached_network_image:]
   cached_network_image: ^1.1.2+1
 
+  # 路由框架 https://github.com/theyakka/fluro
+  fluro: ^1.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

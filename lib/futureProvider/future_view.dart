@@ -8,12 +8,11 @@ import 'package:flutter_gankio/futureProvider/view_state_widget.dart';
 ///[loadData]加载数据的方法
 ///[isFull]是否是铺满的
 class FutureView<T> extends StatelessWidget {
-  final Widget child;
   final Future loadData;
   final bool isFull;
   final Function(T) childView;
 
-  const FutureView({Key key, this.loadData, this.child, this.isFull, this.childView})  : super();
+  const FutureView({Key key, this.loadData, this.isFull, this.childView})  : super();
 
 
 
