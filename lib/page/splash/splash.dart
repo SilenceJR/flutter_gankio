@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gankio/futureProvider/future_view.dart';
 import 'package:flutter_gankio/futureProvider/load_image.dart';
@@ -29,12 +30,15 @@ class SplashPage extends StatelessWidget {
                   imageUrl = json.results[0].url;
                 }
                 return LoadImage(
-                  imageUrl,
+                  'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573731750872&di=8b643764bf2681b6c66bb04c487ac536&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2Ff042a5462aaf1e798ad2e2e0c4e70e74d3dc35cb.jpg',
                   holderImg: "assets/images/splash.jpg",
                   format: "",
                 );
                 // return Container();
               },
+              waitingView: Image.asset('assets/images/splash.jpg'),
+              activeView: Image.asset('assets/images/splash.jpg'),
+              noneView: Image.asset('assets/images/splash.jpg'),
             ),
           ),
           SplashTimeWidget()
@@ -49,54 +53,75 @@ class SplashPage extends StatelessWidget {
   }
 }
 
+class FillImage extends StatefulWidget {
+  final imageUrl;
+  FillImage({this.imageUrl});
+
+  @override
+  _FillImageState createState() => _FillImageState();
+}
+
+class _FillImageState extends State<FillImage>
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+  AnimationController animationController;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadImage(
+      widget.imageUrl,
+      holderImg: "assets/images/splash.jpg",
+      format: "",
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
 class SplashTimeWidget extends StatefulWidget {
   @override
   _SplashTimeWidgetState createState() => _SplashTimeWidgetState();
 }
 
 class _SplashTimeWidgetState extends State<SplashTimeWidget> {
-  StreamController _controller = StreamController();
-  StreamSink _sink;
-
   int _endTime = 5;
   Timer _timer;
 
   @override
   void initState() {
     _endTimeState();
-    _sink = _controller.sink;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _close();
-        _goHomePage();
-      },
-      child: Container(
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-          child: StreamBuilder(
-            initialData: _controller.stream.listen,
-            stream: _controller.stream,
-            builder: (ctx, snapshot) {
-              return FlatButton(
-                onPressed: () {},
-                child: Text("${snapshot.data}"),
-              );
-            },
-          )),
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+      width: 45,
+      height: 45,
+      alignment: Alignment.center,
+      child: InkWell(
+        onTap: () {
+          _close();
+          _goHomePage();
+        },
+        child: Text('$_endTime'),
+      ),
     );
   }
 
   _endTimeState() {
-    _timer = Timer.periodic(Duration(seconds: _endTime), (time) {
-//      setState(() {
-//        _endTime--;
-//      });
-      _sink.add(_endTime--);
+    _timer = Timer.periodic(Duration(seconds: 1), (time) {
+      setState(() {
+        _endTime--;
+      });
       if (_endTime == 0) {
         _close();
         _goHomePage();
@@ -118,10 +143,6 @@ class _SplashTimeWidgetState extends State<SplashTimeWidget> {
     if (_timer != null) {
       _timer.cancel();
       _timer = null;
-    }
-    if (null != _controller) {
-      _controller.close();
-      _controller = null;
     }
   }
 }
