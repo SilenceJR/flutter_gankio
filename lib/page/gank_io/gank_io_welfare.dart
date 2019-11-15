@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gankio/model/gank_io_welfare_model_entity.dart';
+import 'package:flutter_gankio/weiget/title_card.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class GankIoWelfarePage extends StatelessWidget {
@@ -17,18 +19,35 @@ class GankIoWelfare extends StatefulWidget {
 }
 
 class _GankIoWelfareState extends State<GankIoWelfare> {
+
+  List<GankIoWelfareModel> _list = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _initNet();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       child: StaggeredGridView.countBuilder(
-        itemCount: 10,
+        itemCount: _list.length,
         itemBuilder: (ctx, index) {
-          return Card();
+          GankIoWelfareModel list = _list[index];
+          return TitleCard(img: list.url,title: list.type,);
         },
         crossAxisCount: null,
-        staggeredTileBuilder: (int index) {},
+        staggeredTileBuilder: (int index) {
+          return StaggeredTile.fit(2);
+        },
       ),
     );
+  }
+
+  void _initNet() async{
+
   }
 }
